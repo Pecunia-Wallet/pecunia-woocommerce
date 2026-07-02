@@ -6,7 +6,7 @@
  */
 
 /**
- * Plugin Name: WooCommerce Pecunia Wallet Gateway
+ * Plugin Name: Pecunia Wallet Payment Gateway
  * Plugin URI: https://pecuniawallet.com/
  * Description: Adds the Pecunia Wallet Gateway to your WooCommerce website.
  * Version: 1.0.4
