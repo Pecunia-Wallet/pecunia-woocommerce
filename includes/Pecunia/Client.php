@@ -36,13 +36,13 @@ class Client {
     }
 
     private function request(string $method, string $path, array $options = [], int $retries = 1): ResponseInterface {
-        $opts = $options;
-        $opts['headers'] = array_merge($opts['headers'] ?? [], [
-            'X-Api-Token' => $this->token,
-            'Accept' => 'application/json'
-        ]);
-        $attempt = 0;
-        beginning:
+    $opts = $options;
+    $opts['headers'] = array_merge($opts['headers'] ?? [], [
+        'X-Api-Token' => $this->token,
+        'Accept' => 'application/json'
+    ]);
+    $attempt = 0;
+    while (true) {
         try {
             $res = $this->http->request($method, ltrim($path, '/'), $opts);
             $status = $res->getStatusCode();
@@ -55,10 +55,11 @@ class Client {
             if ($attempt < $retries) {
                 $attempt++;
                 usleep(100_000 * $attempt);
-                goto beginning;
+                continue;
             }
             throw new ApiException('Network error: ' . $e->getMessage(), 0);
         }
+    }
     }
 
     private function decodeJson(ResponseInterface $res): ?array {

@@ -1,3 +1,10 @@
+Pecunia Wallet Payment Gateway
+Contributors: pecunia
+Stable tag: 1.0.5
+Tested up to: 7.0
+License: GPLv2 or later
+License URI: https://gnu.org
+
 This is an extension for WooCommerce to accept cryptocurrencies via Pecunia Wallet.
 
 # How to use

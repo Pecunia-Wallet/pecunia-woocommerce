@@ -6,23 +6,24 @@
  */
 
 /**
- * Plugin Name: WooCommerce Pecunia Wallet Gateway
- * Plugin URI: https://pecuniawallet.com/
+ * Plugin Name: Pecunia Wallet Payment Gateway
+ * Plugin URI: https://github.com/Pecunia-Wallet/pecunia-woocommerce
  * Description: Adds the Pecunia Wallet Gateway to your WooCommerce website.
- * Version: 1.0.4
+ * Version: 1.0.5
  * Author: Pecunia GmbH
- * Author URI: https://pecuniawallet.com/
- * Text Domain: woocommerce-gateway-pecunia
- * Domain Path: /languages
+ * Author URI: https://pecuniawallet.com/about/intro
+ * Text Domain: pecunia-wallet-payment-gateway
  * Requires at least: 6.0
  * Requires PHP: 8.0
+ * License: GPLv2 or later
+ * License URI: https://gnu.org
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PECUNIA_WOOCOMMERCE_VERSION', '1.0.4' );
+define( 'PECUNIA_WOOCOMMERCE_VERSION', '1.0.5' );
 define( 'PECUNIA_WOOCOMMERCE_FILE', __FILE__ );
 define( 'PECUNIA_WOOCOMMERCE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'PECUNIA_WOOCOMMERCE_URL', plugin_dir_url( __FILE__ ) );
