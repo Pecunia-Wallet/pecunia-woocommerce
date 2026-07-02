@@ -1,4 +1,10 @@
 <?php
+/*
+ * Copyright (C) 2026 Pecunia GmbH
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 /**
  * Plugin Name: WooCommerce Pecunia Wallet Gateway
  * Plugin URI: https://pecuniawallet.com/
