@@ -6,7 +6,7 @@ import { createElement } from '@wordpress/element';
 
 const settings = getSetting( 'pecunia_data', {} );
 
-const defaultLabel = __( 'Cryptocurrency payments', 'woocommerce-gateway-pecunia' );
+const defaultLabel = __( 'Cryptocurrency payments', 'pecunia-wallet-payment-gateway' );
 
 const label = decodeEntities( settings.title ) || defaultLabel;
 const icon = settings.icon || '';

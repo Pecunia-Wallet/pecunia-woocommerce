@@ -9,7 +9,7 @@
  * Plugin Name: Pecunia Wallet Payment Gateway
  * Plugin URI: https://github.com/Pecunia-Wallet/pecunia-woocommerce
  * Description: Adds the Pecunia Wallet Gateway to your WooCommerce website.
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Pecunia GmbH
  * Author URI: https://pecuniawallet.com/about/intro
  * Text Domain: pecunia-wallet-payment-gateway
@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'PECUNIA_WOOCOMMERCE_VERSION', '1.0.5' );
+define( 'PECUNIA_WOOCOMMERCE_VERSION', '1.0.6' );
 define( 'PECUNIA_WOOCOMMERCE_FILE', __FILE__ );
 define( 'PECUNIA_WOOCOMMERCE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'PECUNIA_WOOCOMMERCE_URL', plugin_dir_url( __FILE__ ) );
@@ -66,7 +66,7 @@ final class WC_Pecunia_Wallet_Gateway {
 	}
 
 	public static function bootstrap(): void {
-		load_plugin_textdomain( 'woocommerce-gateway-pecunia', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+		load_plugin_textdomain( 'pecunia-wallet-payment-gateway', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 		if ( ! class_exists( 'WooCommerce' ) || ! class_exists( 'WC_Payment_Gateway' ) ) {
 			add_action( 'admin_notices', array( __CLASS__, 'missing_woocommerce_notice' ) );
@@ -87,7 +87,7 @@ final class WC_Pecunia_Wallet_Gateway {
 		}
 
 		echo '<div class="notice notice-error"><p>';
-		echo esc_html__( 'WooCommerce Pecunia Wallet Gateway requires WooCommerce to be installed and active.', 'woocommerce-gateway-pecunia' );
+		echo esc_html__( 'WooCommerce Pecunia Wallet Gateway requires WooCommerce to be installed and active.', 'pecunia-wallet-payment-gateway' );
 		echo '</p></div>';
 	}
 
@@ -114,7 +114,7 @@ final class WC_Pecunia_Wallet_Gateway {
 	public static function cron_schedules( array $schedules ): array {
 		$schedules['pecunia_hourly'] = array(
 			'interval' => 3600,
-			'display'  => __( 'Every hour', 'woocommerce-gateway-pecunia' ),
+			'display'  => __( 'Every hour', 'pecunia-wallet-payment-gateway' ),
 		);
 
 		return $schedules;

@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class WC_Gateway_Pecunia extends WC_Payment_Gateway
 {
 	private const SYNC_TTL_SECONDS = 60;
+    private const CALLBACK_SYNC_TTL_SECONDS = 7200;
 	private const POLL_INTERVAL_SECONDS = 3600;
 	private const POLL_BATCH_SIZE = 20;
 	private const POLL_MIN_AGE_SECONDS = 900;
@@ -43,15 +44,15 @@ final class WC_Gateway_Pecunia extends WC_Payment_Gateway
 		$this->id                 = 'pecunia';
 		$this->icon               = $this->get_gateway_icon_url();
 		$this->has_fields         = false;
-		$this->method_title       = __( 'Pecunia', 'woocommerce-gateway-pecunia' );
-		$this->method_description = __( 'Allows cryptocurrency payments via Pecunia Wallet.', 'woocommerce-gateway-pecunia' );
+		$this->method_title       = __( 'Pecunia', 'pecunia-wallet-payment-gateway' );
+		$this->method_description = __( 'Allows cryptocurrency payments via Pecunia Wallet.', 'pecunia-wallet-payment-gateway' );
 		$this->supports           = array( 'products' );
 
 		$this->init_form_fields();
 		$this->init_settings();
 
-		$this->title                    = (string) $this->get_option( 'title', __( 'Cryptocurrency payments', 'woocommerce-gateway-pecunia' ) );
-		$this->description              = (string) $this->get_option( 'description', __( 'Pay with cryptocurrency through Pecunia.', 'woocommerce-gateway-pecunia' ) );
+		$this->title                    = (string) $this->get_option( 'title', __( 'Cryptocurrency payments', 'pecunia-wallet-payment-gateway' ) );
+		$this->description              = (string) $this->get_option( 'description', __( 'Pay with cryptocurrency through Pecunia.', 'pecunia-wallet-payment-gateway' ) );
 		$this->instructions             = $this->description;
 		$this->api_token                = (string) $this->get_option( 'api_token', '' );
 		$this->callback_secret          = (string) $this->get_option( 'callback_secret', '' );
@@ -220,39 +221,39 @@ final class WC_Gateway_Pecunia extends WC_Payment_Gateway
 	{
 		$this->form_fields = array(
 			'enabled' => array(
-				'title'   => __( 'Enable', 'woocommerce-gateway-pecunia' ),
-				'label'   => __( 'Enable cryptocurrency payments via Pecunia', 'woocommerce-gateway-pecunia' ),
+				'title'   => __( 'Enable', 'pecunia-wallet-payment-gateway' ),
+				'label'   => __( 'Enable cryptocurrency payments via Pecunia', 'pecunia-wallet-payment-gateway' ),
 				'type'    => 'checkbox',
 				'default' => 'no',
 			),
 			'title' => array(
-				'title'       => __( 'Title', 'woocommerce-gateway-pecunia' ),
+				'title'       => __( 'Title', 'pecunia-wallet-payment-gateway' ),
 				'type'        => 'text',
-				'description' => __( 'Title shown to customers at checkout.', 'woocommerce-gateway-pecunia' ),
-				'default'     => __( 'Cryptocurrency payments', 'woocommerce-gateway-pecunia' ),
+				'description' => __( 'Title shown to customers at checkout.', 'pecunia-wallet-payment-gateway' ),
+				'default'     => __( 'Cryptocurrency payments', 'pecunia-wallet-payment-gateway' ),
 			),
 			'description' => array(
-				'title'       => __( 'Description', 'woocommerce-gateway-pecunia' ),
+				'title'       => __( 'Description', 'pecunia-wallet-payment-gateway' ),
 				'type'        => 'textarea',
-				'description' => __( 'Description shown to customers at checkout.', 'woocommerce-gateway-pecunia' ),
-				'default'     => __( 'Pay securely with cryptocurrency.', 'woocommerce-gateway-pecunia' ),
+				'description' => __( 'Description shown to customers at checkout.', 'pecunia-wallet-payment-gateway' ),
+				'default'     => __( 'Pay securely with cryptocurrency.', 'pecunia-wallet-payment-gateway' ),
 			),
 			'api_token' => array(
-				'title'       => __( 'API token', 'woocommerce-gateway-pecunia' ),
+				'title'       => __( 'API token', 'pecunia-wallet-payment-gateway' ),
 				'type'        => 'password',
-				'description' => __( 'Token used for Pecunia API requests.', 'woocommerce-gateway-pecunia' ),
+				'description' => __( 'Token used for Pecunia API requests.', 'pecunia-wallet-payment-gateway' ),
 				'default'     => '',
 			),
 			'callback_secret' => array(
-				'title'       => __( 'Callback secret', 'woocommerce-gateway-pecunia' ),
+				'title'       => __( 'Callback secret', 'pecunia-wallet-payment-gateway' ),
 				'type'        => 'password',
-				'description' => __( 'Secret used to verify callback signatures.', 'woocommerce-gateway-pecunia' ),
+				'description' => __( 'Secret used to verify callback signatures.', 'pecunia-wallet-payment-gateway' ),
 				'default'     => '',
 			),
 			'previous_callback_secret' => array(
-				'title'       => __( 'Previous callback secret', 'woocommerce-gateway-pecunia' ),
+				'title'       => __( 'Previous callback secret', 'pecunia-wallet-payment-gateway' ),
 				'type'        => 'password',
-				'description' => __( 'Optional previous callback secret for key rotation.', 'woocommerce-gateway-pecunia' ),
+				'description' => __( 'Optional previous callback secret for key rotation.', 'pecunia-wallet-payment-gateway' ),
 				'default'     => '',
 			),
 		);
@@ -277,7 +278,7 @@ final class WC_Gateway_Pecunia extends WC_Payment_Gateway
 	{
 		$order = wc_get_order( $order_id );
 		if ( ! $order ) {
-			wc_add_notice( __( 'The order could not be loaded.', 'woocommerce-gateway-pecunia' ), 'error' );
+			wc_add_notice( __( 'The order could not be loaded.', 'pecunia-wallet-payment-gateway' ), 'error' );
 			return array( 'result' => 'failure' );
 		}
 
@@ -286,16 +287,16 @@ final class WC_Gateway_Pecunia extends WC_Payment_Gateway
 			$invoice = $this->get_invoice_for_order( $order, true );
 		} catch ( Throwable $e ) {
 			wc_get_logger()->error( $e->getMessage(), array( 'source' => 'pecunia' ) );
-			wc_add_notice( __( 'Unable to create or reuse a payment invoice right now. Please try again.', 'woocommerce-gateway-pecunia' ), 'error' );
+			wc_add_notice( __( 'Unable to create or reuse a payment invoice right now. Please try again.', 'pecunia-wallet-payment-gateway' ), 'error' );
 			return array( 'result' => 'failure' );
 		}
 
 		if ( ! $invoice ) {
-			wc_add_notice( __( 'Unable to create or reuse a payment invoice right now. Please try again.', 'woocommerce-gateway-pecunia' ), 'error' );
+			wc_add_notice( __( 'Unable to create or reuse a payment invoice right now. Please try again.', 'pecunia-wallet-payment-gateway' ), 'error' );
 			return array( 'result' => 'failure' );
 		}
 
-		$order->update_status( 'pending', __( 'Awaiting Pecunia payment.', 'woocommerce-gateway-pecunia' ) );
+		$order->update_status( 'pending', __( 'Awaiting Pecunia payment.', 'pecunia-wallet-payment-gateway' ) );
 
 		return array(
 			'result'   => 'success',
@@ -367,13 +368,13 @@ final class WC_Gateway_Pecunia extends WC_Payment_Gateway
 
 		if ( $match === false ) {
 			status_header( 403 );
-			wp_die( esc_html__( 'Invalid callback signature.', 'woocommerce-gateway-pecunia' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'Invalid callback signature.', 'pecunia-wallet-payment-gateway' ), '', array( 'response' => 403 ) );
 		}
 
 		$payload = $this->parseCallbackPayload( $raw );
 		if ( empty( $payload ) ) {
 			status_header( 400 );
-			wp_die( esc_html__( 'Empty callback payload.', 'woocommerce-gateway-pecunia' ), '', array( 'response' => 400 ) );
+			wp_die( esc_html__( 'Empty callback payload.', 'pecunia-wallet-payment-gateway' ), '', array( 'response' => 400 ) );
 		}
 
 		$invoiceId = $this->extractCallbackValue( $payload, array( 'invoiceId', 'invoice_id', 'id', 'txn_id' ) );
@@ -389,7 +390,7 @@ final class WC_Gateway_Pecunia extends WC_Payment_Gateway
 		$order = wc_get_order( $orderId );
 		if ( ! $order ) {
 			status_header( 404 );
-			wp_die( esc_html__( 'Order not found.', 'woocommerce-gateway-pecunia' ), '', array( 'response' => 404 ) );
+			wp_die( esc_html__( 'Order not found.', 'pecunia-wallet-payment-gateway' ), '', array( 'response' => 404 ) );
 		}
 
 		$storedInvoice = $this->get_stored_invoice( $order );
@@ -698,8 +699,8 @@ final class WC_Gateway_Pecunia extends WC_Payment_Gateway
 		$order->save();
 
 		if ( in_array( $incomingStatus, array( 'pending', 'staggering' ), true ) ) {
-			$order->update_status( 'pending', __( 'Awaiting Pecunia payment.', 'woocommerce-gateway-pecunia' ) );
-			$order->add_order_note( sprintf( __( 'Invoice %1$s is still awaiting payment (%2$s).', 'woocommerce-gateway-pecunia' ), $invoiceId ?: $order->get_meta( WC_Pecunia_Order::META_INVOICE_ID, true ), $incomingStatus ) );
+			$order->update_status( 'pending', __( 'Awaiting Pecunia payment.', 'pecunia-wallet-payment-gateway' ) );
+			$order->add_order_note( sprintf( __( 'Invoice %1$s is still awaiting payment (%2$s).', 'pecunia-wallet-payment-gateway' ), $invoiceId ?: $order->get_meta( WC_Pecunia_Order::META_INVOICE_ID, true ), $incomingStatus ) );
 			return;
 		}
 
@@ -712,18 +713,18 @@ final class WC_Gateway_Pecunia extends WC_Payment_Gateway
 			}
 
 			$note = $incomingStatus === 'overpaid'
-				? __( 'Payment completed with an overpayment. Surplus handling is managed by the merchant.', 'woocommerce-gateway-pecunia' )
-				: __( 'Payment completed successfully.', 'woocommerce-gateway-pecunia' );
+				? __( 'Payment completed with an overpayment. Surplus handling is managed by the merchant.', 'pecunia-wallet-payment-gateway' )
+				: __( 'Payment completed successfully.', 'pecunia-wallet-payment-gateway' );
 
-			$order->add_order_note( $note . ' ' . sprintf( __( 'Invoice ID: %s', 'woocommerce-gateway-pecunia' ), $invoiceId ?: (string) $order->get_meta( WC_Pecunia_Order::META_INVOICE_ID, true ) ) );
+			$order->add_order_note( $note . ' ' . sprintf( __( 'Invoice ID: %s', 'pecunia-wallet-payment-gateway' ), $invoiceId ?: (string) $order->get_meta( WC_Pecunia_Order::META_INVOICE_ID, true ) ) );
 			return;
 		}
 
 		if ( $incomingStatus === 'expired' ) {
 			if ( ! $order->is_paid() ) {
-				$order->update_status( 'failed', __( 'Pecunia invoice expired before payment was completed.', 'woocommerce-gateway-pecunia' ) );
+				$order->update_status( 'failed', __( 'Pecunia invoice expired before payment was completed.', 'pecunia-wallet-payment-gateway' ) );
 			}
-			$order->add_order_note( sprintf( __( 'Invoice %s expired.', 'woocommerce-gateway-pecunia' ), $invoiceId ?: (string) $order->get_meta( WC_Pecunia_Order::META_INVOICE_ID, true ) ) );
+			$order->add_order_note( sprintf( __( 'Invoice %s expired.', 'pecunia-wallet-payment-gateway' ), $invoiceId ?: (string) $order->get_meta( WC_Pecunia_Order::META_INVOICE_ID, true ) ) );
 		}
 	}
 

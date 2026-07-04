@@ -4,13 +4,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="pecunia-payment-box" style="max-width: 820px; margin: 2rem 0; padding: 1.25rem; border: 1px solid #ddd; border-radius: 12px;">
-	<h2 style="margin-top: 0;"><?php echo esc_html__( 'Complete your cryptocurrency payment', 'woocommerce-gateway-pecunia' ); ?></h2>
+	<h2 style="margin-top: 0;"><?php echo esc_html__( 'Complete your cryptocurrency payment', 'pecunia-wallet-payment-gateway' ); ?></h2>
 	<p>
 		<?php
 		echo esc_html(
 			sprintf(
 
-				__( 'Invoice amount: %1$s %2$s', 'woocommerce-gateway-pecunia' ),
+				__( 'Invoice amount: %1$s %2$s', 'pecunia-wallet-payment-gateway' ),
 				(string) $amount,
 				(string) $currency
 			)
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</p>
 	<?php if ( ! empty( $invoiceId ) ) : ?>
 		<p>
-			<strong><?php echo esc_html__( 'Invoice ID:', 'woocommerce-gateway-pecunia' ); ?></strong>
+			<strong><?php echo esc_html__( 'Invoice ID:', 'pecunia-wallet-payment-gateway' ); ?></strong>
 			<?php echo esc_html( (string) $invoiceId ); ?>
 		</p>
 	<?php endif; ?>
@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php if ( ! empty( $paymentUrl ) ) : ?>
 		<p>
 			<a class="button alt" href="<?php echo esc_url( $paymentUrl ); ?>" target="_blank" rel="noopener noreferrer">
-				<?php echo esc_html__( 'Proceed to payment', 'woocommerce-gateway-pecunia' ); ?>
+				<?php echo esc_html__( 'Proceed to payment', 'pecunia-wallet-payment-gateway' ); ?>
 			</a>
 		</p>
 	<?php endif; ?>

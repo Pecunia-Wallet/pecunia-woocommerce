@@ -48,7 +48,7 @@ final class WC_Gateway_Pecunia_Blocks_Support extends AbstractPaymentMethodType
 		if ( function_exists( 'wp_set_script_translations' ) ) {
 			wp_set_script_translations(
 				'wc-pecunia-wallet-blocks',
-				'woocommerce-gateway-pecunia',
+				'pecunia-wallet-payment-gateway',
 				WC_Pecunia_Wallet_Gateway::plugin_abspath() . 'languages/'
 			);
 		}
