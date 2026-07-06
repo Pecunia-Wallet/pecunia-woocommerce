@@ -28,14 +28,14 @@ final class WC_Gateway_Pecunia_Blocks_Support extends AbstractPaymentMethodType
 	public function get_payment_method_script_handles(): array
 	{
 		$script_path = '/assets/js/frontend/blocks.js';
-		$script_asset_path = WC_Pecunia_Wallet_Gateway::plugin_abspath() . 'assets/js/frontend/blocks.asset.php';
+		$script_asset_path = Pecunia_Wallet_Gateway::plugin_abspath() . 'assets/js/frontend/blocks.asset.php';
 		$script_asset = file_exists( $script_asset_path )
 			? require $script_asset_path
 			: array(
 				'dependencies' => array( 'wc-blocks-registry', 'wc-settings', 'wp-element', 'wp-i18n', 'wp-html-entities' ),
 				'version'      => '1.0.0',
 			);
-		$script_url = WC_Pecunia_Wallet_Gateway::plugin_url() . $script_path;
+		$script_url = Pecunia_Wallet_Gateway::plugin_url() . $script_path;
 
 		wp_register_script(
 			'wc-pecunia-wallet-blocks',
@@ -49,7 +49,7 @@ final class WC_Gateway_Pecunia_Blocks_Support extends AbstractPaymentMethodType
 			wp_set_script_translations(
 				'wc-pecunia-wallet-blocks',
 				'pecunia-wallet-payment-gateway',
-				WC_Pecunia_Wallet_Gateway::plugin_abspath() . 'languages/'
+				Pecunia_Wallet_Gateway::plugin_abspath() . 'languages/'
 			);
 		}
 

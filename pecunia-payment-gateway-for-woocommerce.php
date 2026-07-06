@@ -9,7 +9,7 @@
  * Plugin Name: Pecunia Wallet Payment Gateway
  * Plugin URI: https://github.com/Pecunia-Wallet/pecunia-woocommerce
  * Description: Adds the Pecunia Wallet Gateway to your WooCommerce website.
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author: Pecunia GmbH
  * Author URI: https://pecuniawallet.com/about/intro
  * Text Domain: pecunia-wallet-payment-gateway
@@ -49,7 +49,7 @@ require_once PECUNIA_WOOCOMMERCE_PATH . 'includes/Pecunia/Models/Transaction.php
 require_once PECUNIA_WOOCOMMERCE_PATH . 'includes/Pecunia/Client.php';
 require_once PECUNIA_WOOCOMMERCE_PATH . 'includes/Pecunia/Callback.php';
 
-final class WC_Pecunia_Wallet_Gateway {
+final class Pecunia_Wallet_Gateway {
 
 	public static function init(): void {
 		add_action( 'plugins_loaded', array( __CLASS__, 'bootstrap' ), 0 );
@@ -73,7 +73,7 @@ final class WC_Pecunia_Wallet_Gateway {
 			return;
 		}
 
-		require_once PECUNIA_WOOCOMMERCE_PATH . 'includes/class-wc-pecunia-order.php';
+		require_once PECUNIA_WOOCOMMERCE_PATH . 'includes/class-pecunia-order.php';
 		require_once PECUNIA_WOOCOMMERCE_PATH . 'includes/class-wc-gateway-pecunia.php';
 
 		add_filter( 'cron_schedules', array( __CLASS__, 'cron_schedules' ) );
@@ -153,6 +153,6 @@ final class WC_Pecunia_Wallet_Gateway {
 	}
 }
 
-WC_Pecunia_Wallet_Gateway::init();
+Pecunia_Wallet_Gateway::init();
 
-register_deactivation_hook( __FILE__, array( 'WC_Pecunia_Wallet_Gateway', 'deactivate' ) );
+register_deactivation_hook( __FILE__, array('Pecunia_Wallet_Gateway', 'deactivate' ) );
